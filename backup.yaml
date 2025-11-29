@@ -1,0 +1,63 @@
+---
+- name: Backup files using rclone
+  hosts: podman
+  user: root
+  gather_facts: no # Not strictly needed for this simple command execution
+
+  vars:
+    backup_files:
+      - source: "/root/commands"
+        destination: "opendrive:/"
+
+      - source: "/root/containers"
+        destination: "opendrive:/containers"
+
+      - source: "/root/adguard/conf"
+        destination: "opendrive:/volumes/adguard/conf"
+      - source: "/root/adguard/work/data/filters"
+        destination: "opendrive:/volumes/adguard/work/data/filters"
+
+      - source: "/root/commafeed/data"
+        destination: "opendrive:/volumes/commafeed/data"
+
+      - source: "/root/mosquitto/config"
+        destination: "opendrive:/mosquitto/config"
+
+      - source: "/root/ntfy/server.yml"
+        destination: "opendrive:/volumes/ntfy"
+      - source: "/root/ntfy/user.db"
+        destination: "opendrive:/volumes/ntfy"
+
+      - source: "/root/rsstontfy"
+        destination: "opendrive:/volumes/rsstontfy"
+
+      - source: "/root/scraper/config"
+        destination: "opendrive:/volumes/scraper/config"
+
+      - source: "/root/secretariat/ghs.sqlite"
+        destination: "opendrive:/volumes/secretariat"
+      - source: "/root/secretariat/application.properties"
+        destination: "opendrive:/volumes/secretariat"
+
+      - source: "/root/copyparty/copyparty.conf"
+        destination: "opendrive:/volumes/copyparty"
+
+      - source: "/root/caddy/Caddyfile"
+        destination: "opendrive:/volumes/caddy"
+      - source: "/root/caddy/Dockerfile"
+        destination: "opendrive:/volumes/caddy"
+      - source: "/root/caddy/build.sh"
+        destination: "opendrive:/volumes/caddy"
+      - source: "/root/caddy/html"
+        destination: "opendrive:/volumes/caddy/html"
+
+      - source: "/root/frigate/config.yml"
+        destination: "opendrive:/volumes/frigate"
+
+  tasks:
+    - name: Synchronize files/directories using rclone
+      command:
+        cmd: "rclone copy {{ item.source }} {{ item.destination }}"
+      loop: "{{ backup_files }}"
+      loop_control:
+        label: "{{ item.source }} ==> {{ item.destination }}"
