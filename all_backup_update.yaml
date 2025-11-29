@@ -1,0 +1,11 @@
+- name: Backup
+  import_playbook: backup.yml
+
+- name: Caddy
+  import_playbook: caddy.yml
+
+- name: Containers
+  import_playbook: containers.yml
+
+- name: Secretariate client
+  import_playbook: secretariat_client.yml

@@ -1,0 +1,29 @@
+- name: Update caddy container
+  hosts: podman
+  user: root
+  tasks:
+    - name: Podman pull image
+      podman_image:
+        name: docker.io/library/caddy:alpine
+        state: present
+      register: local_image_info
+    - name: Podman pull image force
+      podman_image:
+        name: docker.io/library/caddy:alpine
+        force: true
+      register: remote_image_info
+    - name: Is image updated?
+      set_fact: 
+        is_image_updated: >
+          {{ (local_image_info.image[0].Created[:19] | to_datetime('%Y-%m-%dT%H:%M:%S')).timestamp() < (remote_image_info.image[0].Created[:19] | to_datetime('%Y-%m-%dT%H:%M:%S')).timestamp() }}
+    - name: Build custom image
+      shell: podman build -t localhost/caddy:custom .
+      args:
+        chdir: /root/caddy
+      when: is_image_updated
+    - name: Restart containers if the image was updated
+      shell: systemctl restart caddy.service
+      when: is_image_updated
+#   - name: Debug
+#     debug:
+#       msg: "{{is_image_updated}}"

@@ -1,0 +1,49 @@
+- name: Update container images
+  hosts: podman
+  user: root
+  vars:
+    containers_to_ignore:
+      - caddy
+#     - adguard
+#     - commafeed
+#     - copyparty
+#     - donetick
+#     - frigate
+#     - mosquitto
+#     - ntfy
+#     - rsstontfy
+#     - scraper
+#     - secretariat
+  tasks:
+    - name: Get container names
+      shell: ls containers | grep -Po '.*(?=\.)'
+      register: container_names
+    - name: Get container info
+      podman_container_info:
+        name: "{{item}}"
+      loop: "{{container_names.stdout_lines | reject('in', containers_to_ignore)}}"
+      register: container_info
+    - name: Podman pull image
+      podman_image:
+        name: "{{item.containers[0].ImageName}}"
+        force: true
+      loop: "{{container_info.results}}"
+      loop_control:
+        label: "{{item.containers[0].ImageName}}"
+      when: item.containers | length > 0
+      register: image_info
+    - name: Restart containers if image updated
+      shell: "systemctl restart {{item.0.containers[0].Config.Labels.PODMAN_SYSTEMD_UNIT}}"
+      loop: "{{ container_info.results | zip(image_info.results) | list }}"
+      when:
+        - item.0.containers[0] is defined
+        - item.1.image[0] is defined
+        - (item.0.containers[0].Created[:19] | to_datetime('%Y-%m-%dT%H:%M:%S')).timestamp() < (item.1.image[0].Created[:19] | to_datetime('%Y-%m-%dT%H:%M:%S')).timestamp()
+      loop_control:
+        label: "{{ item.0.containers[0].Name }}"
+#   - name: Debug
+#     debug:
+#       msg: "{{item.containers[0]}}"
+#     loop: "{{container_info.results}}"
+#     loop_control: 
+#       label: "{{item.containers[0].ImageName}}"
