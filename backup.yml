@@ -21,7 +21,7 @@
         destination: "opendrive:/volumes/commafeed/data"
 
       - source: "/root/mosquitto/config"
-        destination: "opendrive:/mosquitto/config"
+        destination: "opendrive:/volumes/mosquitto/config"
 
       - source: "/root/ntfy/server.yml"
         destination: "opendrive:/volumes/ntfy"
