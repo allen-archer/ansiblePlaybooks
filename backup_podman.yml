@@ -54,6 +54,13 @@
       - source: "/root/frigate/config.yml"
         destination: "opendrive:/volumes/frigate"
 
+      - source: "/root/duckdns.sh"
+        destination: "opendrive:/utils"
+      - source: "/etc/systemd/system/duckdns.service"
+        destination: "opendrive:/utils"
+      - source: "/etc/systemd/system/duckdns.timer"
+        destination: "opendrive:/utils"
+
   tasks:
     - name: Synchronize files/directories using rclone
       command:

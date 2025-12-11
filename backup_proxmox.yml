@@ -1,0 +1,21 @@
+---
+- name: Backup files using rclone
+  hosts: proxmox
+  user: root
+  gather_facts: no # Not strictly needed for this simple command execution
+
+  vars:
+    backup_files:
+      - source: "/etc/pve/nodes/pve/lxc/102.conf"
+        destination: "opendrive:/lxc"
+
+      - source: "/etc/pve/nodes/pve/lxc/105.conf"
+        destination: "opendrive:/lxc"
+
+  tasks:
+    - name: Synchronize files/directories using rclone
+      command:
+        cmd: "rclone copy {{ item.source }} {{ item.destination }}"
+      loop: "{{ backup_files }}"
+      loop_control:
+        label: "{{ item.source }} ==> {{ item.destination }}"
