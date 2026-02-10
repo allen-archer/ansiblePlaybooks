@@ -1,8 +1,5 @@
-- name: Backup Podman
-  import_playbook: backup_podman.yml
-
-- name: Backup Proxmox
-  import_playbook: backup_proxmox.yml
+- name: Backup
+  import_playbook: backup.yml
 
 - name: Caddy
   import_playbook: caddy.yml

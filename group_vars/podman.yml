@@ -1,0 +1,55 @@
+backup_files:
+  - source: "/root/commands"
+    destination: "opendrive:/"
+
+  - source: "/root/containers"
+    destination: "opendrive:/containers"
+
+  - source: "/root/adguard/conf"
+    destination: "opendrive:/volumes/adguard/conf"
+  - source: "/root/adguard/work/data/filters"
+    destination: "opendrive:/volumes/adguard/work/data/filters"
+
+  - source: "/root/commafeed/data"
+    destination: "opendrive:/volumes/commafeed/data"
+
+  - source: "/root/mosquitto/config"
+    destination: "opendrive:/volumes/mosquitto/config"
+
+  - source: "/root/ntfy/server.yml"
+    destination: "opendrive:/volumes/ntfy"
+  - source: "/root/ntfy/user.db"
+    destination: "opendrive:/volumes/ntfy"
+
+  - source: "/root/rsstontfy"
+    destination: "opendrive:/volumes/rsstontfy"
+
+  - source: "/root/scraper/config"
+    destination: "opendrive:/volumes/scraper/config"
+
+  - source: "/root/secretariat/ghs.sqlite"
+    destination: "opendrive:/volumes/secretariat"
+  - source: "/root/secretariat/application.properties"
+    destination: "opendrive:/volumes/secretariat"
+
+  - source: "/root/copyparty/copyparty.conf"
+    destination: "opendrive:/volumes/copyparty"
+
+  - source: "/root/caddy/Caddyfile"
+    destination: "opendrive:/volumes/caddy"
+  - source: "/root/caddy/Dockerfile"
+    destination: "opendrive:/volumes/caddy"
+  - source: "/root/caddy/build.sh"
+    destination: "opendrive:/volumes/caddy"
+  - source: "/root/caddy/html"
+    destination: "opendrive:/volumes/caddy/html"
+
+  - source: "/root/frigate/config.yml"
+    destination: "opendrive:/volumes/frigate"
+
+  - source: "/root/duckdns.sh"
+    destination: "opendrive:/utils"
+  - source: "/etc/systemd/system/duckdns.service"
+    destination: "opendrive:/utils"
+  - source: "/etc/systemd/system/duckdns.timer"
+    destination: "opendrive:/utils"

@@ -1,0 +1,21 @@
+---
+- name: Backup files using rclone
+  hosts: podman, proxmox
+  user: root
+  gather_facts: no # Not strictly needed for this simple command execution
+
+  tasks:
+    - name: Check if source and destination match
+      command: "rclone check {{ item.source }} {{ item.destination }} --one-way"
+      register: rclone_check
+      failed_when: rclone_check.rc not in [0, 1]
+      ignore_errors: yes
+      changed_when: false
+      loop: "{{ backup_files }}"
+
+    - name: Synchronize only if differences were found
+      command: "rclone copy {{ item.item.source }} {{ item.item.destination }} --checksum"
+      loop: "{{ rclone_check.results }}"
+      when: item.rc != 0
+      loop_control:
+        label: "Syncing {{ item.item.source }}"
