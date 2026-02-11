@@ -2,5 +2,8 @@ backup_files:
   - source: "/etc/pve/nodes/pve/lxc/102.conf"
     destination: "opendrive:/lxc"
 
+  - source: "/etc/pve/nodes/pve/lxc/103.conf"
+    destination: "opendrive:/lxc"
+
   - source: "/etc/pve/nodes/pve/lxc/105.conf"
     destination: "opendrive:/lxc"
