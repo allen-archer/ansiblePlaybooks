@@ -7,5 +7,5 @@
 - name: Containers
   import_playbook: containers.yml
 
-- name: Secretariate client
+- name: Secretariat client
   import_playbook: secretariat_client.yml

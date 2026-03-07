@@ -1,21 +1,28 @@
 ---
 - name: Backup files using rclone
   hosts: podman, proxmox
-  user: root
-  gather_facts: no # Not strictly needed for this simple command execution
+  gather_facts: no
 
   tasks:
-    - name: Check if source and destination match
-      command: "rclone check {{ item.source }} {{ item.destination }} --one-way"
-      register: rclone_check
-      failed_when: rclone_check.rc not in [0, 1]
-      ignore_errors: yes
-      changed_when: false
+    - name: Synchronize files
+      command: "rclone copy {{ item.source }} {{ item.destination }} --checksum --log-file /var/log/rclone-backup.log --log-level INFO"
       loop: "{{ backup_files }}"
-
-    - name: Synchronize only if differences were found
-      command: "rclone copy {{ item.item.source }} {{ item.item.destination }} --checksum"
-      loop: "{{ rclone_check.results }}"
-      when: item.rc != 0
       loop_control:
-        label: "Syncing {{ item.item.source }}"
+        label: "{{ item.source }}"
+      changed_when: false
+
+    - name: Backup Proxmox LXC configs
+      when: "'proxmox' in group_names"
+      block:
+        - name: Find LXC config files
+          find:
+            paths: /etc/pve/nodes/pve/lxc
+            patterns: "*.conf"
+          register: lxc_configs
+
+        - name: Sync LXC configs to cloud
+          command: "rclone copy {{ item.path }} opendrive:/lxc --checksum --log-file /var/log/rclone-backup.log --log-level INFO"
+          loop: "{{ lxc_configs.files }}"
+          loop_control:
+            label: "{{ item.path }}"
+          changed_when: false
