@@ -53,3 +53,6 @@ backup_files:
     destination: "opendrive:/utils"
   - source: "/etc/systemd/system/duckdns.timer"
     destination: "opendrive:/utils"
+
+  - source: "/root/ideon"
+    destination: "opendrive:/volumes/ideon"
