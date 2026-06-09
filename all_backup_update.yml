@@ -1,3 +1,6 @@
+- name: Guest database backup
+  import_playbook: guestdatabase.yml
+
 - name: Backup
   import_playbook: backup.yml
 

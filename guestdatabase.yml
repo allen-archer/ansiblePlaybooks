@@ -1,0 +1,20 @@
+---
+- name: Backup guest database
+  hosts: podman
+  gather_facts: no
+
+  tasks:
+    - name: Trigger database backup
+      ansible.builtin.uri:
+        url: "{{ guestdatabase_backup_url }}"
+        method: POST
+        url_username: "{{ guestdatabase_backup_user }}"
+        url_password: "{{ guestdatabase_backup_password }}"
+        force_basic_auth: yes
+        status_code: 200, 201, 204
+
+    - name: Sync backup file to cloud
+      command: >
+        rclone copy {{ guestdatabase_backup_file }} {{ guestdatabase_backup_destination }}
+        --checksum --log-file /var/log/rclone-backup.log --log-level INFO
+      changed_when: false
