@@ -1,3 +1,9 @@
+guestdatabase_backup_url: "https://briefing.allenarcher.com/database/backup"
+guestdatabase_backup_user: "allen"
+guestdatabase_backup_password: "homelabguestdatabase"
+guestdatabase_backup_file: "/root/guestdatabase/data/backup_guest_database.db"
+guestdatabase_backup_destination: "opendrive:/volumes/guestdatabase"
+
 backup_files:
   - source: "/root/commands"
     destination: "opendrive:/"
@@ -7,8 +13,6 @@ backup_files:
 
   - source: "/root/adguard/conf"
     destination: "opendrive:/volumes/adguard/conf"
-  - source: "/root/adguard/work/data/filters"
-    destination: "opendrive:/volumes/adguard/work/data/filters"
 
   - source: "/root/commafeed/data"
     destination: "opendrive:/volumes/commafeed/data"
@@ -44,7 +48,7 @@ backup_files:
   - source: "/root/caddy/html"
     destination: "opendrive:/volumes/caddy/html"
 
-  - source: "/root/frigate/config.yml"
+  - source: "/mnt/storage/frigate-config/config.yml"
     destination: "opendrive:/volumes/frigate"
 
   - source: "/root/duckdns.sh"
