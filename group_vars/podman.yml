@@ -28,7 +28,11 @@ backup_files:
   - source: "/root/rsstontfy"
     destination: "opendrive:/volumes/rsstontfy"
 
-  - source: "/root/scraper/config"
+  - source: "/root/scraper/config/config.yml"
+    destination: "opendrive:/volumes/scraper/config"
+  - source: "/root/scraper/config/secrets.yml"
+    destination: "opendrive:/volumes/scraper/config"
+  - source: "/root/scraper/config/mqttConfig.json"
     destination: "opendrive:/volumes/scraper/config"
 
   - source: "/root/secretariat/ghs.sqlite"
